@@ -11,8 +11,13 @@ interface AuthContextProps {
   user: User | null;
   login: (email: string, password: string) => Promise<User | null>;
   logout: () => void;
-  register: (newUser: { nickname: string, email: string, password: string; }) => Promise<void>;
+  register: (newUser: { nickname: string, email: string, password: string; }) => Promise<RegisterResponse>;
   isAuthenticated: boolean;
+}
+
+interface RegisterResponse {
+  created: boolean;
+  message: string;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -53,7 +58,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode; }> = ({ childre
     }
   };
 
-  const register = async ({ nickname, email, password }: { nickname: string, email: string, password: string; }): Promise<void> => {
+  const register = async ({ nickname, email, password }: { nickname: string, email: string, password: string; }): Promise<RegisterResponse> => {
     console.log('Usuario registrado:', { email, password, nickname });
 
     try {
@@ -62,12 +67,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode; }> = ({ childre
         body: JSON.stringify({ email, password, nickname }),
         headers: { 'Content-Type': 'application/json' },
       });
+
       const response = await fetchUser.json();
 
-      console.log(response);
+      if (!fetchUser.ok) {
+        throw new Error(`Error al crear el usuario: ${response.message}`);
+      }
+
+      return {
+        created: true,
+        message: 'Usuario creado correctamente'
+      };
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error('Error al crear el usuario:', error.response?.data || error.message);
+
+      return {
+        created: false,
+        message: `Error al crear el usuario: ${error.response?.data || error.message}`
+      };
     }
   };
 
