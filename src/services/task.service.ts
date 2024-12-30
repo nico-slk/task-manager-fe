@@ -5,8 +5,9 @@ export const TaskService = {
   getTask: async (taskId: string): Promise<Task | null> => {
     try {
       const fetchTask = await fetch(
-        `http://localhost:3000/api/task/${taskId}`,
+        `https://task-manager-production-cf49.up.railway.app/api/task/${taskId}`,
         {
+          method: 'GET',
           headers: {
             Authorization:
               'Bearer ' + JSON.parse(sessionStorage.getItem('token') || ''),
@@ -30,13 +31,17 @@ export const TaskService = {
 
   getAllTasks: async (): Promise<Task[]> => {
     try {
-      const fetchTasks = await fetch('http://localhost:3000/api/task/', {
-        headers: {
-          'Content-Type': 'application/json',
-          authorization:
-            'Bearer ' + JSON.parse(sessionStorage.getItem('token') || ''),
+      const fetchTasks = await fetch(
+        'https://task-manager-production-cf49.up.railway.app/api/task/',
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            authorization:
+              'Bearer ' + JSON.parse(sessionStorage.getItem('token') || ''),
+          },
         },
-      });
+      );
 
       if (!fetchTasks.ok) {
         const { message } = await fetchTasks.json();
@@ -54,15 +59,18 @@ export const TaskService = {
 
   createTask: async (task: Task): Promise<Task | null> => {
     try {
-      const fetchTask = await fetch('http://localhost:3000/api/task/', {
-        method: 'POST',
-        body: JSON.stringify(task),
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization:
-            'Bearer ' + JSON.parse(sessionStorage.getItem('token') || ''),
+      const fetchTask = await fetch(
+        'https://task-manager-production-cf49.up.railway.app/api/task/',
+        {
+          method: 'POST',
+          body: JSON.stringify(task),
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization:
+              'Bearer ' + JSON.parse(sessionStorage.getItem('token') || ''),
+          },
         },
-      });
+      );
 
       if (!fetchTask.ok) {
         const { message } = await fetchTask.json();
@@ -81,7 +89,7 @@ export const TaskService = {
   updateTask: async (task: Task): Promise<Task | null> => {
     try {
       const fetchTask = await fetch(
-        `http://localhost:3000/api/task/${task.id}`,
+        `https://task-manager-production-cf49.up.railway.app/api/task/${task.id}`,
         {
           method: 'PUT',
           body: JSON.stringify(task),
@@ -110,7 +118,7 @@ export const TaskService = {
   deleteTask: async (taskId: string): Promise<Task | null> => {
     try {
       const fetchTask = await fetch(
-        `http://localhost:3000/api/task/${taskId}`,
+        `https://task-manager-production-cf49.up.railway.app/api/task/${taskId}`,
         {
           method: 'DELETE',
           headers: {

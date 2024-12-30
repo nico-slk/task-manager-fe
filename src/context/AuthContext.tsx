@@ -30,7 +30,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode; }> = ({ childre
   const login = async (email: string, password: string): Promise<User | null> => {
     try {
 
-      const fetchUser = await fetch('http://localhost:3000/api/auth/login', {
+      const fetchUser = await fetch('https://task-manager-production-cf49.up.railway.app/api/auth/login', {
         method: 'POST',
         body: JSON.stringify({ email, password }),
         headers: { 'Content-Type': 'application/json' },
@@ -63,7 +63,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode; }> = ({ childre
     console.log('Usuario registrado:', { email, password, nickname });
 
     try {
-      const fetchUser = await fetch('http://localhost:3000/api/auth/register', {
+      const fetchUser = await fetch('https://task-manager-production-cf49.up.railway.app/api/auth/register', {
         method: 'POST',
         body: JSON.stringify({ email, password, nickname }),
         headers: { 'Content-Type': 'application/json' },
