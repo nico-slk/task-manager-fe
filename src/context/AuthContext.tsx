@@ -4,7 +4,6 @@ interface User {
   id: string;
   nickname: string;
   email: string;
-  token: string;
 }
 
 interface AuthContextProps {
@@ -31,7 +30,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode; }> = ({ childre
   const login = async (email: string, password: string): Promise<User | null> => {
     try {
 
-      const fetchUser = await fetch('http://localhost:3000/api/auth/login', {
+      const fetchUser = await fetch('https://task-manager-production-cf49.up.railway.app/api/auth/login', {
         method: 'POST',
         body: JSON.stringify({ email, password }),
         headers: { 'Content-Type': 'application/json' },
@@ -44,10 +43,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode; }> = ({ childre
 
       const response = await fetchUser.json();
 
-      const { id, nickname, email: userEmail, token } = response.user;
+      const { id, nickname, email: userEmail } = response.user;
+      const { token } = response;
 
-      const userData: User = { id, nickname, email: userEmail, token };
+      const userData: User = { id, nickname, email: userEmail };
       sessionStorage.setItem('user', JSON.stringify(userData));
+      sessionStorage.setItem('token', JSON.stringify(token));
       setUser(userData);
 
       return userData;
@@ -62,7 +63,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode; }> = ({ childre
     console.log('Usuario registrado:', { email, password, nickname });
 
     try {
-      const fetchUser = await fetch('http://localhost:3000/api/auth/register', {
+      const fetchUser = await fetch('https://task-manager-production-cf49.up.railway.app/api/auth/register', {
         method: 'POST',
         body: JSON.stringify({ email, password, nickname }),
         headers: { 'Content-Type': 'application/json' },
@@ -92,6 +93,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode; }> = ({ childre
 
   const logout = () => {
     sessionStorage.removeItem('user');
+    sessionStorage.removeItem('token');
     setUser(null);
   };
 
