@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTask } from '../../context/TaskContext';
+import NewTask from './NewTask';
 import Task from './Task';
 
 const TaskList = () => {
@@ -15,6 +16,7 @@ const TaskList = () => {
   return (
     <div >
       {tasksList.length > 0 && tasksList.map((task) => (<Task key={task.id} task={task} />))}
+      <NewTask />
     </div>
   );
 };
