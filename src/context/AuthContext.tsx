@@ -4,7 +4,6 @@ interface User {
   id: string;
   nickname: string;
   email: string;
-  token: string;
 }
 
 interface AuthContextProps {
@@ -44,10 +43,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode; }> = ({ childre
 
       const response = await fetchUser.json();
 
-      const { id, nickname, email: userEmail, token } = response.user;
+      const { id, nickname, email: userEmail } = response.user;
+      const { token } = response;
 
-      const userData: User = { id, nickname, email: userEmail, token };
+      const userData: User = { id, nickname, email: userEmail };
       sessionStorage.setItem('user', JSON.stringify(userData));
+      sessionStorage.setItem('token', JSON.stringify(token));
       setUser(userData);
 
       return userData;
@@ -92,6 +93,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode; }> = ({ childre
 
   const logout = () => {
     sessionStorage.removeItem('user');
+    sessionStorage.removeItem('token');
     setUser(null);
   };
 

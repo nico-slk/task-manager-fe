@@ -5,11 +5,20 @@ interface CustomButtonProps {
   style: string;
   fn: () => void;
   type?: 'button' | 'submit' | 'reset';
+  icon?: string;
 }
 
-const CustomButton = ({ text, style, fn, type = 'button' }: CustomButtonProps) => {
+const CustomButton = ({ text, style, icon, fn, type = 'button' }: CustomButtonProps) => {
+
   return (
-    <button className={`${style}`} onClick={fn} type={type} >{text}</button>
+    <button className={`${style}`} onClick={fn} type={type} >
+      {
+        icon
+          ? <img src={icon} alt={text} />
+          : <p>{text}</p>
+      }
+
+    </button>
   );
 };
 
